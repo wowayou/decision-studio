@@ -1,0 +1,42 @@
+{
+  "browser": "153.0.8010.12",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "applyButton": {
+    "x": 1285.984375,
+    "y": 826,
+    "width": 99.015625,
+    "height": 44
+  },
+  "result": {
+    "view": "决策依赖图",
+    "selectedNode": "node-login",
+    "focus": "node-login"
+  },
+  "taskClicksFromGraphToSameUpdatedNode": 3,
+  "taskViewChanges": 0,
+  "responsiveBoundaryChecks": [
+    {
+      "width": 699,
+      "overflow": false
+    },
+    {
+      "width": 701,
+      "overflow": false
+    },
+    {
+      "width": 959,
+      "overflow": false
+    },
+    {
+      "width": 961,
+      "overflow": false
+    },
+    {
+      "width": 1380,
+      "overflow": false
+    }
+  ]
+}

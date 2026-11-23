@@ -1,0 +1,23 @@
+
+> decision-studio@0.1.0 test:smoke
+> npm run build && node tests/production-smoke.mjs
+
+
+> decision-studio@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 123 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.43 kB │ gzip:   0.33 kB
+dist/assets/index-CuviPzEr.css   26.29 kB │ gzip:   6.53 kB
+dist/assets/index-B-r-EKLp.js   329.51 kB │ gzip: 104.25 kB
+✓ built in 1.03s
+PRODUCTION_SMOKE browser=153.0.8010.12
+PRODUCTION_SMOKE viewport=1440 overflow=false candidates=3
+PRODUCTION_SMOKE viewport=1024 overflow=false candidates=3
+PRODUCTION_SMOKE viewport=768 overflow=false candidates=3
+PRODUCTION_SMOKE viewport=375 overflow=false candidates=3
+PRODUCTION_SMOKE passed; external HTTP requests=0

@@ -1,0 +1,26 @@
+{
+  "before": {
+    "inspectorTop": 1038.765625,
+    "viewportHeight": 900,
+    "selectedNode": "node-login",
+    "editButtonTop": 1282.46875
+  },
+  "during": {
+    "view": "引导决策",
+    "question": "访客现在需要登录网站吗？",
+    "focus": "BODY"
+  },
+  "after": {
+    "view": "引导决策",
+    "question": "以后谁来更新网站内容？",
+    "focus": "BODY",
+    "hasChangeSummary": false,
+    "hasBackButton": false
+  },
+  "returned": {
+    "selectedNode": "node-membership",
+    "inspector": "本期账户能力"
+  },
+  "taskClicksFromGraphToSameUpdatedNode": 6,
+  "taskViewChanges": 2
+}

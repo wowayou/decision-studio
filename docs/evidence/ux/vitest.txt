@@ -1,0 +1,20 @@
+
+> decision-studio@0.1.0 test
+> vitest run tests/unit
+
+
+ RUN  v3.2.7 <project-root>
+
+stdout | tests/unit/baseline.test.ts > 局部重算基线与全量一致性（500 次，固定输入）
+LOCAL_BASELINE n=500 median=0.018ms p95=0.073ms
+
+ ✓ tests/unit/baseline.test.ts (1 test) 21ms
+ ✓ tests/unit/engine.test.ts (36 tests) 36ms
+ ✓ tests/unit/interaction.test.ts (11 tests) 13ms
+ ✓ tests/unit/storage.test.ts (15 tests) 82ms
+
+ Test Files  4 passed (4)
+      Tests  63 passed (63)
+   Start at  20:50:04
+   Duration  616ms (transform 316ms, setup 0ms, collect 706ms, tests 153ms, environment 1ms, prepare 442ms)
+
