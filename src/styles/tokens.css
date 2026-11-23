@@ -1,0 +1,51 @@
+/* Design tokens. Every text/background pair below was checked at >= 4.5:1 (WCAG AA). */
+:root {
+  color-scheme: light;
+  --font-sans: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Surfaces */
+  --bg: #f5f6f2;
+  --surface: #ffffff;
+  --surface-sunken: #f8f9f6;
+  --surface-muted: #eef1ea;
+  --border: #dfe4da;
+  --border-strong: #c7d0c0;
+
+  /* Text: primary, secondary, meta (meta is still >= 5.3:1 on every surface) */
+  --text: #1d2721;
+  --text-2: #45534a;
+  --text-3: #58665c;
+
+  /* Brand */
+  --accent: #1f6b47;
+  --accent-strong: #185638;
+  --accent-soft: #e6f0e8;
+  --accent-border: #a9c9b4;
+  --accent-text: #1c5e3f;
+  --focus: #2b7a52;
+
+  /* Semantic */
+  --ok-fg: #25653a; --ok-bg: #e4f1e6; --ok-border: #b5d5bc;
+  --warn-fg: #765000; --warn-bg: #fbf0d4; --warn-border: #e6cd8c;
+  --danger-fg: #9f2f29; --danger-bg: #fcebe9; --danger-border: #eec1bc;
+  --info-fg: #33507d; --info-bg: #e7eef8; --info-border: #c3d1e8;
+  --violet-fg: #57518c; --violet-bg: #eeecf7;
+
+  /* Type scale: 12px is the floor for any text */
+  --fs-xs: 12px; --fs-sm: 13px; --fs-base: 14px; --fs-md: 15px; --fs-lg: 17px; --fs-xl: 20px; --fs-2xl: 26px;
+  --lh: 1.65; --lh-tight: 1.35;
+
+  /* Spacing (4px grid), radius, elevation */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;
+  --radius-sm: 6px; --radius: 10px; --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgb(29 39 33 / 5%);
+  --shadow-md: 0 8px 24px rgb(29 39 33 / 10%);
+  --shadow-lg: 0 20px 60px rgb(29 39 33 / 22%);
+
+  /* Layout */
+  --sidebar-w: 236px;
+  --topbar-h: 60px;
+  --control-h: 36px;
+  --touch-h: 44px;
+}

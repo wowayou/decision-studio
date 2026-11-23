@@ -1,6 +1,6 @@
 import { ids, isOther, type Candidate, type Constraint, type Fit, type NodeId, type Nodes, type Project, type Qid, type Result, type Value } from '../core/types';
 import { activeIdentity, includes, usable } from './rules';
-import { formatValue, labels } from './website';
+import { formatValue, labels, questionOrder } from './website';
 
 interface Bundle { id: string; name: string; description: string; base: string[]; accounts: boolean; visual: string; owner: string; tradeoff: string; risk: string; maintenance: Fit; extension: Fit }
 const bundles: Bundle[] = [
@@ -35,8 +35,7 @@ function assumptionsFor(p: Project, n: Nodes): string[] {
   return assumptions;
 }
 function nextQuestions(p: Project, nodes: Nodes, conflict: boolean): Qid[] {
-  const order: Qid[] = ['editors', 'login', 'identity', 'limits', 'purpose', 'languages', 'priority', 'budget'];
-  const open = order.filter(id => (id !== 'identity' || activeIdentity(nodes)) && (p.answers[id].source.type !== 'user' || nodes[id].status === 'stale'));
+  const open = questionOrder.filter(id => (id !== 'identity' || activeIdentity(nodes)) && (p.answers[id].source.type !== 'user' || nodes[id].status === 'stale'));
   if (conflict) return [...new Set<Qid>(['limits', 'login', ...open])];
   return open;
 }

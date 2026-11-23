@@ -19,9 +19,18 @@ async function run() {
   console.log(`PRODUCTION_SMOKE browser=${browser.version()}`);
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   page.setDefaultTimeout(5000);
-  const external = [];
+  const external = [], pageErrors = [];
   page.on('request', r => { if (new URL(r.url()).origin !== origin) external.push(r.url()); });
+  page.on('pageerror', e => pageErrors.push(e.message));
+  // Record Content-Security-Policy violations raised by the production meta policy.
+  await page.addInitScript(() => {
+    window.__cspViolations = [];
+    document.addEventListener('securitypolicyviolation', e => window.__cspViolations.push(`${e.violatedDirective} ${e.blockedURI}`));
+  });
   await page.goto(origin, { timeout: 10_000 });
+  const policy = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
+  expect(policy).toContain("connect-src 'none'");
+  console.log(`PRODUCTION_SMOKE csp=${policy}`);
   await expect(page).toHaveTitle(/Decision Studio/);
   await page.getByRole('button', { name: /^B2B 多语言官网/ }).click();
   await page.getByRole('button', { name: '确认并继续', exact: true }).click();
@@ -34,9 +43,15 @@ async function run() {
     console.log(`PRODUCTION_SMOKE viewport=${width} overflow=false candidates=3`);
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.screenshot({ path: 'docs/evidence/ux/production-p0.png', fullPage: true });
+  await page.screenshot({ path: 'test-results/production-smoke.png', fullPage: true });
+  // Exercise the graph, solutions table, record view and in-app dialog under the policy.
+  for (const name of ['决策依赖图', '方案与取舍', '决策记录']) await page.getByRole('button', { name, exact: true }).click();
+  await page.getByRole('button', { name: '清空本机项目', exact: true }).click();
+  await page.getByRole('alertdialog').getByRole('button', { name: '取消', exact: true }).click();
   expect(external).toEqual([]);
-  console.log('PRODUCTION_SMOKE passed; external HTTP requests=0');
+  expect(pageErrors).toEqual([]);
+  expect(await page.evaluate(() => window.__cspViolations)).toEqual([]);
+  console.log('PRODUCTION_SMOKE passed; external HTTP requests=0; CSP violations=0; page errors=0');
 }
 try {
   await Promise.race([run(), timeout]);

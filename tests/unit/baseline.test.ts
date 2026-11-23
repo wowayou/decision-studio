@@ -12,7 +12,7 @@ test('局部重算基线与全量一致性（500 次，固定输入）', () => {
     samples.push(performance.now() - start);
   }
   samples.sort((a, b) => a - b);
-  console.log(`LOCAL_BASELINE n=500 median=${samples[250].toFixed(3)}ms p95=${samples[475].toFixed(3)}ms`);
+  console.log(`LOCAL_BASELINE n=500 median=${samples[250]!.toFixed(3)}ms p95=${samples[475]!.toFixed(3)}ms`);
   expect(last.result).toEqual(evaluate(last.project).result);
-  expect(last.project.log[0].affected).toHaveLength(6);
+  expect(last.project.log[0]!.affected).toHaveLength(6);
 });

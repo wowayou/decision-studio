@@ -1,13 +1,15 @@
-import { ids, isBand, type Answer, type Project, type Qid, type Seed, type Session, type Value } from './types';
+import { ids, isBand, TEXT_LIMITS, type Answer, type Project, type Qid, type Seed, type Session, type Value } from './types';
 import { fixtures, VERSION } from '../domain/website';
 import { activeIdentity, evaluateNodes, graph } from '../domain/rules';
 import { compare } from '../domain/candidates';
 import { validValue } from '../domain/validation';
+import { newId } from './id';
 
 export function evaluate(project: Project): Session {
   return { project, result: compare(project, evaluateNodes(project)) };
 }
-export function create(seed: Seed, description = '', at = new Date().toISOString(), id: string = crypto.randomUUID()): Session {
+export function create(seed: Seed, description = '', at = new Date().toISOString(), id: string = newId()): Session {
+  if (description.length > TEXT_LIMITS.description) throw new Error(`需求描述请控制在 ${TEXT_LIMITS.description} 字符内。`);
   const answers = {} as Project['answers'];
   for (const questionId of ids) {
     const value = structuredClone(fixtures[seed].values[questionId]);

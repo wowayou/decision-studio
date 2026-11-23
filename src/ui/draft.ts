@@ -20,10 +20,9 @@ export function readDraft(id: Qid, draft: QuestionDraft): DraftValue {
     return validValue(id, value) ? { ok: true, value } : { ok: false, error: '补充说明请控制在 500 字符内。', focus: 'other' };
   }
   if (questions[id].kind === 'range') {
-    const values = draft.range.map(Number);
+    const [min, target, max] = draft.range.map(Number) as [number, number, number];
     const blank = draft.range.findIndex(s => !s.trim());
-    const invalid = values.findIndex(n => !Number.isFinite(n) || n < 0);
-    const [min, target, max] = values;
+    const invalid = [min, target, max].findIndex(n => !Number.isFinite(n) || n < 0);
     const focus = blank >= 0 ? blank : invalid >= 0 ? invalid : target < min ? 1 : 2;
     const value = { min, target, max };
     if (blank >= 0 || !validValue(id, value)) return { ok: false, error: '请填写三个非负数，目标下限 ≤ 目标上限 ≤ 可容忍上限。', focus };

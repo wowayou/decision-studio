@@ -131,8 +131,8 @@ test('AC13：自动保存、刷新恢复、JSON 导出、清空再导入一致',
   await expect(page.getByRole('heading', { name: 'B2B 多语言官网', exact: true })).toBeVisible();
   expect(await stored(page)).toEqual(before);
   await page.getByRole('button', { name: '决策记录', exact: true }).click();
-  page.once('dialog', d => d.accept());
   await page.getByRole('button', { name: '清空本机项目', exact: true }).click();
+  await page.getByRole('alertdialog').getByRole('button', { name: '清空项目', exact: true }).click();
   await expect(page.getByRole('heading', { name: '先说目标，再做取舍。' })).toBeVisible();
   expect(await page.evaluate(k => localStorage.getItem(k), KEY)).toBeNull();
   await page.getByLabel('导入 JSON 项目', { exact: true }).setInputFiles(exported.path);

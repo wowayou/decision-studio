@@ -45,6 +45,8 @@ export const questions: Record<Qid, Question> = {
     recommended: 'balanced', rationale: '还没体验具体的维护工作前，可以先对照取舍。',
   },
 };
+/** Guide order: high-impact capability questions first, then scope and preferences. */
+export const questionOrder: readonly Qid[] = ['editors', 'login', 'identity', 'limits', 'purpose', 'languages', 'priority', 'budget'];
 const base: Record<Qid, Value> = { editors: ['team'], purpose: ['show', 'inquiry'], login: null, identity: null, languages: ['zh', 'en'], limits: [], budget: null, priority: 'balanced' };
 export const fixtures: Record<Seed, { name: string; summary: string; values: Record<Qid, Value> }> = {
   'b2b-site': { name: 'B2B 多语言官网', summary: '向海外客户展示产品，收集询盘。', values: { ...base } },

@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { create, answer } from '../../src/core/session';
 import { impactBetween, sameValue } from '../../src/core/impact';
 import { draftChanged, draftFromValue, readDraft } from '../../src/ui/draft';
-import { editableQuestion, nodeValue, upstreamQuestions } from '../../src/ui/DecisionInspector';
+import { editableQuestion, nodeValue, upstreamQuestions } from '../../src/domain/inspect';
 import { jsonBackup } from '../../src/storage/project';
 
 const at = '2026-11-22T12:00:00.000Z';

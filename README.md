@@ -5,6 +5,7 @@
 - [Implementation Brief](IMPLEMENTATION_BRIEF.md)：编码前提交的最小实现方案。
 - [P0 验收报告](docs/P0_ACCEPTANCE.md)：实际测试结果、证据和未完成项。
 - [UX 走查与优化](docs/UX_REVIEW.md)：节点原位修改、草稿边界、成熟模式参考与优化后的验收。
+- [界面与底层重构](docs/REFACTOR.md)：设计令牌与可读字号、页内确认、多标签页保护、渲染失败兜底、生产 CSP 与最新验收。
 - [演示步骤](docs/DEMO.md)：未知、传播、冲突与备份恢复。
 - 需求事实来源：[PRD.md](PRD.md)、[AGENT_HANDOFF.md](AGENT_HANDOFF.md)。
 
@@ -67,7 +68,9 @@ npm run preview
 ## 保存、导入与导出
 
 - 一次维护一个项目，使用 localStorage 单键原子写入。清除浏览器数据、私密模式退出或换浏览器可能丢失本机项目，**JSON 才是可携带的备份**。
-- 切换模板、清空或导入替换前需要确认。保存配额/权限失败会明显提示，内存中的草案仍可导出。
+- 切换模板、清空或导入替换前使用页内确认对话框，默认焦点在「取消」；取消不改动本机项目。保存配额/权限失败会明显提示，内存中的草案仍可导出。
+- 同一浏览器打开多个标签页时，若另一个标签页修改或清空了项目，当前页**暂停自动保存**并提示「载入最新版本 / 保留此页并覆盖」，不会静默互相覆盖；每次写入前也会核对存储内容，错过事件（如标签页被冻结）时同样暂停。仅打开第二个标签页不会触发提示。
+- 界面渲染出错时显示恢复页，可直接下载本机保存的原始项目；恢复页只读，不写存储。
 - 导入/导出上限为 **4 MiB（UTF-8 字节）**。超限变更不应用，保持现有可备份项目；文件在读取和解析前后都有大小保护。
 - 项目格式为 `1`，网站规则包为 `1.0.0`。导入检查类型、选项、区间、版本、来源与变更记录，并通过记录重放恢复事实。
 - 备份内的候选和图节点不是权威事实，恢复时重新计算。不要手工修改答案或来源而不更新记录；来源/记录不一致会拒绝导入。
@@ -77,6 +80,8 @@ npm run preview
 ## 离线与 AI 边界
 
 安装依赖后，可在不联网的电脑上通过本机服务运行；运行中所有求值、编辑、图、保存和导出都不需要外部网络。浏览器自动化还验证了**资源加载后阻断全部网络**的核心操作。
+
+生产构建（`npm run build`）在页面中注入内容安全策略（CSP）：只允许加载同源脚本与样式，`connect-src 'none'` 禁止页面发起任何网络连接，也禁止 `eval`。开发服务器不注入，以免阻断 Vite 热更新。若将来托管到服务器，还应以响应头设置 `frame-ancestors`（meta 标签无法设置）。
 
 没有 Service Worker 或安装型离线缓存：完全断开本机 HTTP 服务后，不能承诺关闭页面再冷启动/刷新仍然加载成功。保持本机服务，或先加载页面再断外网即可使用。
 
@@ -88,23 +93,26 @@ npm run preview
 npm test          # Vitest：纯规则、传播、冲突、来源与持久化
 npm run test:e2e  # Playwright：真实 Chromium 核心操作
 npm run build    # TypeScript 检查与生产构建
-npm run test:smoke # 构建后在本机预览真实 dist，检查 4 个响应式宽度
+npm run test:smoke # 构建后在本机预览真实 dist：4 个响应式宽度、CSP 违规、页面错误与外部请求
 ```
 
 其他机器首次跑 E2E 需要 Playwright 的 Chromium；没有浏览器缓存时，可由使用者执行 `npx playwright install chromium` 下载浏览器。本次未执行下载或系统级安装。
 
-E2E 为单 worker、无自动重试、总超时 240 秒；生产冒烟测试另限 30 秒。两者不添加 CI、周期任务或远端测试服务。图片与 HTML 报告生成于 `test-results/`、`playwright-report/`；验收时保留的实际输出见 `docs/evidence/`。测试不等同于新手可用性研究或生产可靠性证明。
+E2E 为单 worker、无自动重试、总超时 360 秒；生产冒烟测试另限 30 秒。两者不添加 CI、周期任务或远端测试服务。图片与 HTML 报告生成于 `test-results/`、`playwright-report/`；验收时保留的实际输出见 `docs/evidence/`。测试不等同于新手可用性研究或生产可靠性证明。
 
 ## 文件结构与技术取舍
 
 ```text
-src/core/           类型、会话变更、依赖编译
-src/domain/         网站问题、4 个 seed、规则、候选与报告
-src/ui/             引导、图、方案、记录（共享同一会话）
-src/storage/        Zod 校验、版本入口、恢复、备份
-src/styles.css      基础响应式与键盘聚焦样式
-tests/unit/         规则、边界、保存与局部重算基线
-tests/e2e/          真实 Chromium 验收场景
+src/core/           类型、会话变更、依赖编译、标识生成
+src/domain/         网站问题、4 个 seed、规则、候选、报告与只读查询（inspect）
+src/storage/        project：Zod 校验、版本入口、恢复、备份（纯函数）
+                    browser：localStorage、跨标签页事件、下载（浏览器副作用）
+src/ui/             App 编排；AppShell、GuideView、DependencyGraph、Solutions、RecordView 等视图
+                    useLocalProject：已应用项目与本机保存状态的唯一来源
+src/styles/         tokens（颜色/字号/间距）→ base（元素与按钮）→ shell（框架）→ views（各视图）
+vite.config.ts      仅生产构建注入 CSP
+tests/unit/         规则、边界、保存、局部重算基线与加固项
+tests/e2e/          真实 Chromium 验收场景（P0、UX、加固）
 ```
 
 从只有两份需求文档的目录开始，没有已有技术栈或 Git 仓库。采用 React + TypeScript + Vite；React 状态足够维护单项目，不引入额外状态库。原生 SVG 连线与 HTML 按钮足够呈现 14 节点，避免让图形库承担求值。单项目体量有硬上限，localStorage 满足 P0，保留失败提示和 JSON 备份，不为本地闭环增加数据库服务。Zod 用于不可信导入，Vitest/Playwright 分别验证规则和真实界面。

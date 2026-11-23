@@ -3,7 +3,10 @@ export type Qid = typeof ids[number];
 export const capabilityIds = ['content', 'membership', 'auth', 'data', 'deploy', 'publishing'] as const;
 export type CapabilityId = typeof capabilityIds[number];
 export type NodeId = Qid | CapabilityId;
-export type Seed = 'b2b-site' | 'blog' | 'saas' | 'contradiction';
+export const seeds = ['b2b-site', 'blog', 'saas', 'contradiction'] as const;
+export type Seed = typeof seeds[number];
+/** Character limits shared by the UI, validation and the import schema. */
+export const TEXT_LIMITS = { description: 2000, other: 500 } as const;
 export type Band = { min: number; target: number; max: number };
 export type Value = string | string[] | Band | { other: string } | null;
 export type Status = 'unknown' | 'user_confirmed' | 'user_approximate' | 'preset' | 'rule_derived' | 'ai_suggested' | 'not_applicable' | 'stale' | 'conflicted';

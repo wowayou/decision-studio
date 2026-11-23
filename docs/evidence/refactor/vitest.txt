@@ -1,0 +1,21 @@
+
+> decision-studio@0.1.0 test
+> vitest run tests/unit
+
+
+ RUN  v3.2.7 /home/yoxu/Dev/products/decision-studio
+
+stdout | tests/unit/baseline.test.ts > 局部重算基线与全量一致性（500 次，固定输入）
+LOCAL_BASELINE n=500 median=0.153ms p95=0.352ms
+
+ ✓ tests/unit/baseline.test.ts (1 test) 119ms
+ ✓ tests/unit/engine.test.ts (36 tests) 135ms
+ ✓ tests/unit/interaction.test.ts (11 tests) 56ms
+ ✓ tests/unit/hardening.test.ts (9 tests) 170ms
+ ✓ tests/unit/storage.test.ts (15 tests) 383ms
+
+ Test Files  5 passed (5)
+      Tests  72 passed (72)
+   Start at  11:30:01
+   Duration  1.90s (transform 1.05s, setup 0ms, collect 2.37s, tests 863ms, environment 3ms, prepare 1.07s)
+

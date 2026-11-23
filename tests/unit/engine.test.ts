@@ -129,7 +129,7 @@ describe('P0 网站规则闭环', () => {
   test('偏好只排序合格组；未知指标不伪造分数', () => {
     const base = put(seed(), 'login', 'none');
     const s = put(base, 'priority', 'maintenance');
-    expect(s.result.candidates[0].id).toBe('traditional_cms');
+    expect(s.result.candidates[0]!.id).toBe('traditional_cms');
     expect(s.result.candidates.map(c => [c.id, c.hardFailures]).sort()).toEqual(base.result.candidates.map(c => [c.id, c.hardFailures]).sort());
     expect(s.result.orderReason).toContain('同档并列');
     expect(s.result.candidates.every(c => c.fit.cost === 'unknown')).toBe(true);

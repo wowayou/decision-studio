@@ -1,0 +1,6 @@
+date: 2026-11-23T11:28:53+09:00
+node: v24.18.0
+npm: 11.16.0
+os: Linux 7.0.0-43-generic x86_64
+PRODUCTION_SMOKE browser=153.0.8010.12
+deps: npm ci --prefer-offline (lockfile unchanged; zod 4.3.6 fetched from the public npm registry because the local cache lacked it)
